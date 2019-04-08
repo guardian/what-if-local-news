@@ -12,8 +12,7 @@ lazy val common = (project in file("common"))
   .settings(
     name := "common",
     libraryDependencies ++= Seq(
-      "com.sksamuel.elastic4s" %% "elastic4s-http" % "6.3.7",
-      "org.elasticsearch.client" % "elasticsearch-rest-client-sniffer" % "6.4.2",
+      "com.sksamuel.elastic4s" %% "elastic4s-http" % "6.3.7"
     )
   )
 

@@ -12,3 +12,4 @@ case class CouncilContract(title: String,
                            suppliers: Option[List[ContractSupplier]],
                            entities: DocumentEntities)
 
+

@@ -1,2 +1,4 @@
-addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.7.0")
-addSbtPlugin("org.foundweekends.giter8" % "sbt-giter8-scaffold" % "0.11.0")
+resolvers += "Typesafe repository" at "https://repo.typesafe.com/typesafe/releases/"
+
+addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.6.18")
+addSbtPlugin("io.get-coursier" % "sbt-coursier" % "1.1.0-M1")

@@ -8,48 +8,89 @@ import com.sksamuel.elastic4s.http.index.admin.IndexExistsResponse
 
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, ExecutionContext, Future}
+import scala.concurrent.duration._
+import scala.util.{Failure, Success}
 
 trait CouncilContractsIndex {
   def client: ElasticClient
 
   def setupCouncilContracts()(implicit ec: ExecutionContext) = {
-    client.execute(indexExists("council-contracts")).flatMap {
-      case IndexExistsResponse(false) =>
-        Await.ready(client.execute(createIndex("council-contracts").mappings(
-          mapping("_doc").as(
-            textField("title"),
-            textField("organisationName"),
-            textField("description"),
-            textField("publishedDate"), // Make date?
-            textField("status"),
-            floatField("valueLow"),
-            floatField("valueHigh"),
-            textField("awardedDate"), // Make date?
-            floatField("awardedValue"),
-            objectField("suppliers").fields(
-              textField("name"),
-              textField("address"),
-              textField("refType"),
-              textField("refNumber"),
-              booleanField("isSME"),
-              booleanField("isVCSE")
-            ),
-            objectField("entities").fields(
-              textField("people"),
-              textField("places"),
-              textField("organisations"),
-              textField("dates"), // TOOD make dates?
-              textField("keyPhrases"),
-              textField("sentiment"),
+    Await.ready(client.execute(indexExists("council-contracts")).flatMap { resp =>
+      println("Checking if we need to create council-contracts index...")
+      resp.result match {
+        case IndexExistsResponse(false) =>
+
+          println("Index did not already exist - creating")
+          client.execute(createIndex("council-contracts").mappings(
+            mapping("_doc").as(
+              textField("title"),
+              textField("organisationName"),
+              textField("description"),
+              textField("publishedDate"), // Make date field?
+              textField("status"),
+              floatField("valueLow"),
+              floatField("valueHigh"),
+              textField("awardedDate"), // Make date fields?
+              floatField("awardedValue"),
+              objectField("suppliers").fields(
+                textField("name"),
+                textField("address"),
+                textField("refType"),
+                textField("refNumber"),
+                booleanField("isSME"),
+                booleanField("isVCSE")
+              ),
+              objectField("entities").fields(
+                textField("people"),
+                textField("places"),
+                textField("organisations"),
+                textField("dates"), // TOOD make dates fields?
+                textField("keyPhrases"),
+                textField("sentiment"),
+              )
             )
-          )
-        )), Duration.Inf)
-      case _ =>
-        Future.successful()
-    }
+          ))
+        case _ =>
+          println("Index already exists!")
+          Future.successful()
+      }
+    }, 10 seconds)
   }
 
-  def insertCouncilContracts(contract: CouncilContract): Unit = {
-    // TODO
+  def insertCouncilContracts(contract: CouncilContract)(implicit ec: ExecutionContext): Unit = {
+    val values = Map(
+      "title" -> contract.title,
+      "organisationName" -> contract.organisationName,
+      "description" -> contract.description,
+      "publishedDate" -> contract.publishedDate, // Make date field?
+      "status" -> contract.status,
+      "entities" -> Map(
+        "people" -> contract.entities.people,
+        "places" -> contract.entities.places,
+        "organisations" -> contract.entities.organisations,
+        "dates" -> contract.entities.dates, // TOOD make dates fields?
+        "keyPhrases" -> contract.entities.keyPhrases,
+        "sentiment" -> contract.entities.sentiment,
+      )
+    ) ++
+      contract.valueLow.map("valueLow" -> _) ++
+      contract.valueHigh.map("valueHigh" -> _) ++
+      contract.awardedDate.map("awardedDate" -> _)++
+      contract.awardedValue.map("awardedValue" -> _) ++
+      contract.suppliers.map { suppliers =>
+      "suppliers" -> suppliers.map { supplier =>
+        Map(
+          "name" -> supplier.name,
+          "address" -> supplier.address,
+          "isSME" -> supplier.isSME,
+          "isVCSE" -> supplier.isVCSE
+        ) ++ supplier.refType.map("refType" -> _) ++ supplier.refNumber.map("refNumber" -> _)
+      }
+    }
+
+    client.execute(indexInto("council-contracts" / "_doc").fields(values)).andThen {
+      case Success(response) => println(s"Successfully inserted document ${response.result}")
+      case Failure(why) => println(s"Failed to insert document ${why}")
+    }
   }
 }
