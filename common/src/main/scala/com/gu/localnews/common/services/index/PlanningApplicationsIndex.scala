@@ -56,11 +56,6 @@ trait PlanningApplicationsIndex {
     val values = Map(
       "address" -> application.address,
       "caseRef" -> application.caseRef,
-      "conservationArea" -> application.conservationArea,
-      "applicantName" -> application.applicantName,
-      "applicantCompany" -> application.applicantCompany,
-      "applicationType" -> application.applicationType,
-      "applicationLink" -> application.applicationLink,
       "proposal" -> application.proposal,
       "dateReceived" -> application.dateReceived, // Make date field?
       "status" -> application.status,
@@ -72,7 +67,13 @@ trait PlanningApplicationsIndex {
         "keyPhrases" -> application.entities.keyPhrases,
         "sentiment" -> application.entities.sentiment,
       )
-    )
+    )++
+      application.conservationArea.map("conservationArea" -> _) ++
+      application.applicantName.map("applicantName" -> _) ++
+      application.applicantCompany.map("applicantCompany" -> _)++
+      application.applicationType.map("applicationType" -> _) ++
+      application.applicationLink.map("applicationLink" -> _)
+
 
     client.execute(indexInto("planning-applications" / "_doc").fields(values)).andThen {
       case Success(response) => println(s"Successfully inserted document ${response.result}")

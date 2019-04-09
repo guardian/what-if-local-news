@@ -25,11 +25,11 @@ object PlanningApplicationParser {
 
       name match {
         case Some(n) => entities.addPerson(n)
-        case None => _
+        case None =>
       }
       company match {
         case Some(c) => entities.addOrganisation(c)
-        case None => _
+        case None =>
       }
       entities.addPlace(address)
       entities.addDate(dateReceived)
