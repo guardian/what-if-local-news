@@ -12,7 +12,8 @@ lazy val common = (project in file("common"))
   .settings(
     name := "common",
     libraryDependencies ++= Seq(
-      "com.sksamuel.elastic4s" %% "elastic4s-http" % "6.3.7"
+      "com.sksamuel.elastic4s" %% "elastic4s-http" % "6.3.7",
+      "com.typesafe.play" %% "play-json" % "2.6.13"
     )
   )
 
@@ -26,7 +27,8 @@ lazy val frontend = (project in file("frontend"))
       ws,
       "com.pauldijou" %% "jwt-play" % "0.18.0",
       "com.beachape" %% "enumeratum-play" % "1.5.14",
-      "com.iheart" %% "ficus" % "1.4.4"
+      "com.iheart" %% "ficus" % "1.4.4",
+      "com.typesafe.play" %% "play-json" % "2.6.13"
     ),
 
     javaOptions in Universal ++= Seq(

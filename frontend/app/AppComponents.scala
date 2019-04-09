@@ -22,7 +22,7 @@ class AppComponents(context: Context, config: Config)
   override def router: Router = new Routes(
     httpErrorHandler,
     new HomeController(cc),
-    new Search(cc),
+    new Search(index, cc),
     new Management(cc),
     assets
   )
