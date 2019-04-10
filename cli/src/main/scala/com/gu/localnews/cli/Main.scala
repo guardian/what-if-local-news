@@ -2,7 +2,7 @@ package com.gu.localnews.cli
 
 import java.util.concurrent.Executors
 
-import com.gu.localnews.cli.parsers.{ContractParser, PlanningApplicationParser}
+import com.gu.localnews.cli.parsers.{ContractParser, PlanningApplicationParser, PetitionParser}
 import com.gu.localnews.common.services.index.{Index, ElasticsearchClient}
 
 import scala.concurrent.ExecutionContext
@@ -19,7 +19,6 @@ object Main extends App {
 
   options.`type`() match {
     case ImportType.CouncilContracts =>
-
       // Setup first time IS THIS RIGHT?
       val index = new Index(client)
       index.setupCouncilContracts()
@@ -33,7 +32,6 @@ object Main extends App {
         index.insertCouncilContracts(c)
       }
     case ImportType.PlanningApplications =>
-
       // Setup first time IS THIS RIGHT?
       val index = new Index(client)
       index.setupPlanningApplications()
@@ -45,6 +43,15 @@ object Main extends App {
         i += 1
         println(s"$i/$total")
         index.insertPlanningApplications(a)
+      }
+
+    case ImportType.CouncilPetitions =>
+      val index = new Index(client)
+      index.setupCouncilPetitions()
+      val petitions = PetitionParser.parse(options.file())
+
+      petitions.foreach { p =>
+        index.insertCouncilPetitions(p)
       }
 
     case _ =>
