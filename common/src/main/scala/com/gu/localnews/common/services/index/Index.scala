@@ -40,6 +40,7 @@ class Index(val client: ElasticClient)
          hit.index match {
            case "council-contracts" =>
              SearchHit(hit.index,
+               hit.id,
                hitField(sourceMap, "title")._2,
                Map()+ hitField(sourceMap, "description")+
                  hitField(sourceMap, "valueLow")+
@@ -52,6 +53,7 @@ class Index(val client: ElasticClient)
 
            case "planning-applications" =>
              SearchHit(hit.index,
+               hit.id,
                hitField(sourceMap, "proposal")._2,
                Map()+ hitField(sourceMap, "applicationLink")+
                  hitField(sourceMap, "caseRef")+
@@ -66,6 +68,7 @@ class Index(val client: ElasticClient)
 
            case "council-petitions" =>
              SearchHit(hit.index,
+               hit.id,
                hitField(sourceMap, "title")._2,
                Map() + hitField(sourceMap, "description")+
                 hitField(sourceMap, "petitionLink")+
