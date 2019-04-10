@@ -40,14 +40,7 @@ trait CouncilContractsIndex {
                 booleanField("isSME"),
                 booleanField("isVCSE")
               ),
-              objectField("entities").fields(
-                textField("people"),
-                textField("places"),
-                textField("organisations"),
-                textField("dates"), // TOOD make dates fields?
-                textField("keyPhrases"),
-                textField("sentiment"),
-              )
+              ElasticsearchHelpers.entityFieldMappings
             )
           ))
         case _ =>

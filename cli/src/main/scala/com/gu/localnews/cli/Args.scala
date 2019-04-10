@@ -16,7 +16,7 @@ object ImportType extends CliEnum[ImportType] {
 }
 
 class Args(args: Seq[String]) extends ScallopConf(args) {
-  val `type` = opt[ImportType](name = "type", noshort = true, required = true, descr = s"The type of this file, can be one of: ${ImportType.values.mkString(", '")}")
+  val `type` = opt[ImportType](name = "type", noshort = true, required = true, descr = s"The type of this file, can be one of: ${ImportType.values.mkString(", ")}")
 
   val file = trailArg[File]()
   verify()
