@@ -11,6 +11,8 @@ object ImportType extends CliEnum[ImportType] {
   val values = findValues
 
   case object CouncilContracts extends ImportType
+  case object PlanningApplications extends ImportType
+  case object CouncilPetitions extends ImportType
 }
 
 class Args(args: Seq[String]) extends ScallopConf(args) {

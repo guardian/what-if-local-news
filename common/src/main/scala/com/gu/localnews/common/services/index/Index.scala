@@ -7,7 +7,10 @@ import com.sksamuel.elastic4s.http.ElasticDsl._
 
 import scala.concurrent.ExecutionContext
 
-class Index(val client: ElasticClient) extends CouncilContractsIndex {
+class Index(val client: ElasticClient)
+  extends CouncilContractsIndex
+    with PlanningApplicationsIndex
+    with CouncilPetitionsIndex {
   def query(searchParams: SearchParameters)(implicit ec: ExecutionContext) = {
     val highlightDefinition = highlight("*")
       .order("score")
@@ -23,6 +26,10 @@ class Index(val client: ElasticClient) extends CouncilContractsIndex {
        resp.result.hits.hits.map { hit =>
          hit.index match {
            case "council-contracts" =>
+             SearchHit(hit.index, hit.sourceAsMap("title").asInstanceOf[String])
+           case "planning-applications" =>
+             SearchHit(hit.index, hit.sourceAsMap("proposal").asInstanceOf[String])
+           case "council-petitions" =>
              SearchHit(hit.index, hit.sourceAsMap("title").asInstanceOf[String])
            case unknown => throw new Exception("Unknown index: ${unknown}")
          }
