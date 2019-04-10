@@ -32,6 +32,8 @@ class Index(val client: ElasticClient)
       )
         .from(searchParams.from)
         .size(searchParams.size)
+        .highlighting(highlightDefinition)
+
     ).map { resp =>
        resp.result.hits.hits.map { hit =>
          val sourceMap = hit.sourceAsMap
