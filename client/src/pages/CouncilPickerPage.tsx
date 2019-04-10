@@ -38,7 +38,7 @@ const CouncilPickerPage = () => {
         <Results>
           {results.map(council => (
             <li key={council.id}>
-              <CouncilPreview council={council} searchString={query} />
+              <CouncilPreview council={council} searchStrings={[query]} />
             </li>
           ))}
         </Results>

@@ -1,5 +1,6 @@
 import React from "react";
-import { PersonWithDocuments, getPerson } from "../services/CouncillorService";
+import { Person as TPerson } from "../services/people";
+import { getPerson } from "../services/CouncillorService";
 import Person from "../Person";
 import { useAsync } from "../hooks/useAsync";
 
@@ -10,7 +11,7 @@ type PersonPageProps = {
 const PersonPage = ({ id }: PersonPageProps) => {
   const [person] = useAsync(
     (id: string) => getPerson(id).then(res => res.results),
-    null as PersonWithDocuments | null | undefined,
+    null as TPerson | null | undefined,
     id
   );
 

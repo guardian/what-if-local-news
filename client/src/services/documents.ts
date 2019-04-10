@@ -1,71 +1,45 @@
-export type Document = {
+interface SearchHit {
   id: string;
-  date: number;
-  councilId: string;
-  name: string;
-  src: string;
-  mimeType: string;
-  type: string;
-  text: string;
-  people: string[];
-  places: string[];
-  keyphrases: string[];
-};
+  title: string;
+  highlights?: string[];
+  fields: object;
+}
 
-const documents: { [id: string]: Document } = {
-  "1": {
-    id: "1",
-    date: Date.now(),
-    councilId: "1",
-    name: "Candy cane house",
-    src: "/example-pdfs/helloworld.pdf",
-    text: "Someone painted their house funny colors",
-    people: ["1", "3"],
-    places: ["1"],
-    mimeType: "application/pdf",
-    type: "Planning application",
-    keyphrases: ["funny colors"]
-  },
-  "2": {
-    id: "2",
-    date: Date.now(),
-    councilId: "2",
-    name: "Playground",
-    src: "/example-pdfs/helloworld.pdf",
-    text:
-      "A developer denied access to a new playground for the social housing tenants",
-    people: ["2"],
-    places: ["2"],
-    mimeType: "application/pdf",
-    type: "Planning application",
-    keyphrases: ["A developer denied access"]
-  },
-  "3": {
-    id: "3",
-    date: Date.now(),
-    councilId: "1",
-    name: "Flammable cladding",
-    src: "/example-pdfs/helloworld.pdf",
-    text: "discussion on flammable cladding for tower blocks",
-    people: [],
-    places: ["3"],
-    mimeType: "application/pdf",
-    type: "Council minutes",
-    keyphrases: ["flammable cladding"]
-  },
-  "4": {
-    id: "4",
-    date: Date.now(),
-    councilId: "1",
-    name: "House rejection",
-    src: "/example-pdfs/helloworld.pdf",
-    text: "We disagree with the house",
-    people: ["1", "3"],
-    places: ["1"],
-    mimeType: "application/pdf",
-    type: "Planning dispute",
-    keyphrases: ["We disagree"]
-  }
-};
+export interface PlanningApplication extends SearchHit {
+  index: "planning-applications";
+  fields: {
+    applicationLink: string;
+    caseRef: string;
+    applicationType: string;
+    conservationArea: string;
+    dateReceived: string;
+    status: string;
+    applicantCompany: string;
+    applicantName: string;
+  };
+}
 
-export { documents };
+export interface Contract extends SearchHit {
+  index: "council-contracts";
+  fields: {
+    description: string;
+    valueLow: string;
+    valueHigh: string;
+    status: string;
+    publishedDate: string;
+    organisationName: string;
+  };
+}
+
+export interface Petition extends SearchHit {
+  index: "council-petitions";
+  fields: {
+    signatures: string;
+    description: string;
+    petitionLink: string;
+    backgroundInfo: string;
+    creator: string;
+  };
+}
+
+export type Document = PlanningApplication | Contract | Petition;

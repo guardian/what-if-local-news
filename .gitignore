@@ -1,6 +1,7 @@
 .idea
 logs
 target
+seed
 
 node_modules/
 .metals

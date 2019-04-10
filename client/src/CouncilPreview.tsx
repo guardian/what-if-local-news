@@ -8,7 +8,7 @@ import styled from "styled-components";
 
 type CouncilPreviewProps = {
   council: Council;
-  searchString?: string;
+  searchStrings?: string[];
 };
 
 const Title = styled.h2`
@@ -21,13 +21,13 @@ const Card = styled(Paper)`
   padding: 1em;
 `;
 
-const CouncilPreview = ({ council, searchString }: CouncilPreviewProps) => (
+const CouncilPreview = ({ council, searchStrings }: CouncilPreviewProps) => (
   <Card>
     <Title>
       <Link path={`/council/${council.id}`}>
         <Highlighter
           string={council.name}
-          substring={searchString}
+          substrings={searchStrings}
           renderMatch={str => <Highlight>{str}</Highlight>}
         />
       </Link>
