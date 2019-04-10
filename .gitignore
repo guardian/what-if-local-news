@@ -2,3 +2,7 @@
 logs
 target
 
+node_modules/
+.metals
+.DS_Store
+.bloop
