@@ -50,7 +50,7 @@ trait CouncilContractsIndex {
     }, 10 seconds)
   }
 
-  def insertCouncilContracts(contract: CouncilContract)(implicit ec: ExecutionContext): Unit = {
+  def insertCouncilContracts(contract: CouncilContract)(implicit ec: ExecutionContext) = {
     val values = Map(
       "title" -> contract.title,
       "organisationName" -> contract.organisationName,
@@ -81,9 +81,13 @@ trait CouncilContractsIndex {
       }
     }
 
-    client.execute(indexInto("council-contracts" / "_doc").fields(values)).andThen {
+    val future = client.execute(indexInto("council-contracts" / "_doc").fields(values))
+    
+    future.andThen {
       case Success(response) => println(s"Successfully inserted document ${response.result}")
       case Failure(why) => println(s"Failed to insert document ${why}")
     }
+
+    future
   }
 }

@@ -42,7 +42,7 @@ trait CouncilPetitionsIndex {
   }
 
 
-  def insertCouncilPetitions(petition: CouncilPetition)(implicit ec: ExecutionContext): Unit = {
+  def insertCouncilPetitions(petition: CouncilPetition)(implicit ec: ExecutionContext) = {
     val values = Map(
       "title" -> petition.title,
       "petitionLink" -> petition.petitionLink,
@@ -64,10 +64,14 @@ trait CouncilPetitionsIndex {
       petition.backgroundInfo.map("backgroundInfo" -> _) ++
       petition.signatures.map("signatures" -> _.map(_.name))
 
-    client.execute(indexInto("council-petitions" / "_doc").fields(values)).andThen {
+    val future = client.execute(indexInto("council-petitions" / "_doc").fields(values))
+    
+    future.andThen {
       case Success(response) => println(s"Successfully inserted document ${response.result}")
       case Failure(why) => println(s"Failed to insert document ${why}")
     }
+
+    future
   }
 
 }
