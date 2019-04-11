@@ -40,10 +40,10 @@ object Resource {
           map("description").asInstanceOf[String],
           map("publishedDate").asInstanceOf[String], // Make date field?
           map("status").asInstanceOf[String],
-          map.get("valueLow").map(_.asInstanceOf[Float]),
-          map.get("valueHigh").map(_.asInstanceOf[Float]),
+          map.get("valueLow").map(_.asInstanceOf[Double]),
+          map.get("valueHigh").map(_.asInstanceOf[Double]),
           map.get("awardedDate").map(_.asInstanceOf[String]), // Make date fields?
-          map.get("awardedValue").map(_.asInstanceOf[Float]),
+          map.get("awardedValue").map(_.asInstanceOf[Double]),
           map.get("suppliers").map { suppliers =>
             suppliers.asInstanceOf[List[Map[String, AnyRef]]].map { supplier =>
               ContractSupplier(

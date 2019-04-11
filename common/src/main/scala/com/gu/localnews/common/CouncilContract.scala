@@ -8,10 +8,10 @@ case class CouncilContract(title: String,
                            description: String,
                            publishedDate: String,
                            status: String,
-                           valueLow: Option[Float],
-                           valueHigh: Option[Float],
+                           valueLow: Option[Double],
+                           valueHigh: Option[Double],
                            awardedDate: Option[String],
-                           awardedValue: Option[Float],
+                           awardedValue: Option[Double],
                            suppliers: Option[List[ContractSupplier]],
                            entities: DocumentEntities) extends ResourceFields
 

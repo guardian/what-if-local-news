@@ -43,7 +43,7 @@ object PlanningApplicationParser {
         name,
         company,
         readFromMap("application-type", row),
-        row("application-link"),
+        row.get("application-link"),
         row("proposal"),
         dateReceived,
         row("status"),
