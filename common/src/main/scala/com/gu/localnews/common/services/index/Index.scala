@@ -34,15 +34,6 @@ class Index(val client: ElasticClient)
         .size(searchParams.size)
         .highlighting(highlightDefinition)
          .aggs(
-           /**
-             *
-           textField("people").fields(keywordField("raw")),
-      textField("places").fields(keywordField("raw")),
-      textField("organisations").fields(keywordField("raw")),
-      textField("dates").fields(keywordField("raw")),
-      textField("keyPhrases").fields(keywordField("raw")),
-      textField("sentiment").fields(keywordField("raw"))
-             */
            termsAggregation("significant_people").field("entities.people.raw"),
            termsAggregation("significant_places").field("entities.places.raw"),
            termsAggregation("significant_organisations").field("entities.organisations.raw"),

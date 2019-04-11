@@ -56,4 +56,6 @@ object Main extends App {
 
     case _ =>
   }
+
+  System.exit(0)
 }
