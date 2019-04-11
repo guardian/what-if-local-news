@@ -3,7 +3,7 @@ package com.gu.localnews.common.model
 import com.gu.localnews.common._
 import play.api.libs.json._
 
-case class Resource(id: String, index: String, fields: ResourceFields)
+case class Resource(id: String, index: String, title: String, fields: ResourceFields)
 trait ResourceFields
 
 object ResourceFields {
@@ -84,8 +84,17 @@ object Resource {
           extractEntites(map)
         )
     }
+    
+    val title = index match {
+      case "council-contracts" =>
+        map("title").asInstanceOf[String]
+      case "council-petitions" =>
+        map("title").asInstanceOf[String]
+      case "planning-applications" =>
+        map("proposal").asInstanceOf[String]
+    }
 
-    Resource(index, id, fields)
+    Resource(index, id, title, fields)
   }
 }
 
