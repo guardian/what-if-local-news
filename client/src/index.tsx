@@ -3,10 +3,6 @@ import ReactDOM from "react-dom";
 import App from "./App";
 import { createGlobalStyle } from "styled-components";
 
-fetch("/api/search?q=home")
-  .then(res => res.json())
-  .then(console.log);
-
 const GlobalStyle = createGlobalStyle`
   *, :before, :after {
       box-sizing: border-box;

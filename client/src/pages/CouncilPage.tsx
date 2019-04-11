@@ -3,9 +3,9 @@ import Omni from "../Omni";
 import {
   search,
   getCouncil,
-  CouncilWithPeopleAndKeyPhrases
+  CouncilWithPeopleAndKeyPhrases,
+  SearchResponse
 } from "../services/CouncillorService";
-import { Document } from "../services/documents";
 import styled from "styled-components";
 import { useDebouncedQuery } from "../hooks/useDebouncedQuery";
 import { useAsync } from "../hooks/useAsync";
@@ -36,7 +36,17 @@ const CouncilPage = ({ id }: CouncilPageProps) => {
   >();
   const [results, loading, query, setQuery] = useDebouncedQuery(
     (query, tags) => search({ query, tags }),
-    [] as Document[],
+    {
+      hits: [],
+      aggs: {
+        significant_sentiment: [],
+        significant_key_phrases: [],
+        significant_people: [],
+        significant_dates: [],
+        significant_organisations: [],
+        significant_places: []
+      }
+    } as SearchResponse,
     500,
     "",
     tags
@@ -76,7 +86,7 @@ const CouncilPage = ({ id }: CouncilPageProps) => {
             </KeyPhrase>
           ))}
           <ol>
-            {results.map(document => (
+            {results.hits.map(document => (
               <li key={document.id}>
                 <DocumentPreview
                   document={document}

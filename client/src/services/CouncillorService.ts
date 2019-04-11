@@ -62,13 +62,32 @@ const joinWithPlaces = <T extends { places: string[] }>(
 //     .map(joinWithPeople)
 // });
 
+type AggregateData = {
+  key: string;
+  count: number;
+};
+
+type Aggregates = {
+  significant_sentiment: AggregateData[];
+  significant_key_phrases: AggregateData[];
+  significant_people: AggregateData[];
+  significant_dates: AggregateData[];
+  significant_organisations: AggregateData[];
+  significant_places: AggregateData[];
+};
+
+export type SearchResponse = {
+  hits: Document[];
+  aggs: Aggregates;
+};
+
 const search = ({
   query,
   tags
 }: {
   query: string;
   tags: string[];
-}): Promise<Document[]> =>
+}): Promise<SearchResponse> =>
   fetch(
     `/api/search?q=${[query, ...tags]
       .filter(Boolean)
