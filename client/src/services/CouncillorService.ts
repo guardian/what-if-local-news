@@ -24,50 +24,13 @@ export type PersonWithDocuments = Person & {
 export type PlaceWithDocumentsAndDocumentPeople = Place & {
   documents: DocumentWithPeople[];
 };
-export type CouncilWithPeopleAndKeyPhrases = Replace<
-  Council,
-  {
-    people: Person[];
-    keyphrases: string[];
-  }
->;
 
-const joinWithPeople = <T extends { people: string[] }>(
-  item: T
-): T & { people: Person[] } => ({
-  ...item,
-  people: item.people.map(personId => people[personId])
-});
-
-const joinWithPlaces = <T extends { places: string[] }>(
-  item: T
-): T & { places: Place[] } => ({
-  ...item,
-  places: item.places.map(placeId => places[placeId])
-});
-
-// const joinEnitityWithDocs = (person: Person): PersonWithDocuments => ({
-//   ...person,
-//   documents: Object.values(documents).filter(doc =>
-//     doc.people.includes(person.id)
-//   )
-// });
-
-// const joinPlaceWithFilledDocs = (
-//   place: Place
-// ): PlaceWithDocumentsAndDocumentPeople => ({
-//   ...place,
-//   documents: Object.values(documents)
-//     .filter(doc => doc.people.includes(place.id))
-//     .map(joinWithPeople)
-// });
-
-type AggregateData = {
+export type AggregateData = {
   key: string;
   count: number;
 };
 
-type Aggregates = {
+export type Aggregates = {
   significant_sentiment: AggregateData[];
   significant_key_phrases: AggregateData[];
   significant_people: AggregateData[];
@@ -81,6 +44,29 @@ export type SearchResponse = {
   aggs: Aggregates;
 };
 
+const ES_SPECIAL_CHARS = [
+  `&`,
+  `|`,
+  `!`,
+  `(`,
+  `)`,
+  `{`,
+  `}`,
+  `[`,
+  `]`,
+  `^`,
+  `"`,
+  `~`,
+  `*`,
+  `?`,
+  `:`
+];
+
+const esre = new RegExp(
+  `(${ES_SPECIAL_CHARS.map(c => `\\${c}`).join("|")})`,
+  "g"
+);
+
 const search = ({
   query,
   tags
@@ -91,8 +77,8 @@ const search = ({
   fetch(
     `/api/search?q=${[query, ...tags]
       .filter(Boolean)
-      .map(t => `(${t})`)
-      .join("AND")}`
+      .map(t => `"${t.replace(esre, "\\$1")}"`)
+      .join(" AND ")}`
   ).then(res => res.json());
 
 const getDocument = (id: string): Promise<{ results?: Document }> =>
@@ -103,14 +89,9 @@ const getPerson = (id: string): Promise<{ results?: Person }> =>
     results: people[id]
   });
 
-const getCouncil = (
-  id: string
-): Promise<{ results?: CouncilWithPeopleAndKeyPhrases }> =>
+const getCouncil = (id: string): Promise<{ results?: Council }> =>
   network({
-    results: {
-      ...joinWithPeople(councils[id]),
-      keyphrases: ["heat"]
-    }
+    results: councils[id]
   });
 
 const getPlace = (id: string): Promise<{ results?: Place }> =>
