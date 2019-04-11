@@ -2,12 +2,12 @@ import React, { useRef, useEffect } from "react";
 import { build } from "./graph";
 import { createGraphSVGRenderer } from "./SVGRenderer";
 
-const n = (id: string, label: string): [string, string, number] => [
-  id,
-  label,
-  400
-];
-const e = (a: string, b: string): [string, string, number] => [a, b, 20];
+const n = (
+  id: string,
+  label: string,
+  first: boolean
+): [string, string, number] => [id, label, first ? 3000 : 400];
+const e = (a: string, b: string): [string, string, number] => [a, b, 10];
 
 const GraphLayout = ({
   nodeSpecs,
@@ -24,7 +24,7 @@ const GraphLayout = ({
     if (!el) return;
     let g = build(
       {
-        nodeSpecs: nodeSpecs.map(args => n(...args)),
+        nodeSpecs: nodeSpecs.map((args, i) => n(args[0], args[1], i === 0)),
         edgeSpecs: edgeSpecs.map(args => e(...args))
       },
       50

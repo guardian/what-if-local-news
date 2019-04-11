@@ -4,7 +4,7 @@ import { people, Person } from "./people";
 import { councils, Council } from "./councils";
 
 const network = <T>(val: T): Promise<T> =>
-  new Promise(res => setTimeout(() => res(val), Math.random() * 1000));
+  new Promise(res => setTimeout(() => res(val), Math.random() * 2000));
 
 type Replace<T extends object, O extends object> = Pick<
   T,
@@ -74,15 +74,19 @@ const search = ({
   query: string;
   tags: string[];
 }): Promise<SearchResponse> =>
-  fetch(
-    `/api/search?q=${[query, ...tags]
-      .filter(Boolean)
-      .map(t => `"${t.replace(esre, "\\$1")}"`)
-      .join(" AND ")}`
-  ).then(res => res.json());
+  Promise.all([
+    fetch(
+      `/api/search?q=${[query, ...tags]
+        .filter(Boolean)
+        .map(t => `"${t.replace(esre, "\\$1")}"`)
+        .join(" AND ")}`
+    ).then(res => res.json()),
+    // ( ͡° ͜ʖ ͡°) it's demo time
+    network(null)
+  ]).then(([v]) => v);
 
-const getDocument = (id: string): Promise<{ results?: Document }> =>
-  network({}); // todo implement
+const getDocument = (index: string, id: string): Promise<Document> =>
+  fetch(`/api/resources/${index}/${id}`).then(res => res.json()); // todo implement
 
 const getPerson = (id: string): Promise<{ results?: Person }> =>
   network({
@@ -90,7 +94,7 @@ const getPerson = (id: string): Promise<{ results?: Person }> =>
   });
 
 const getCouncil = (id: string): Promise<{ results?: Council }> =>
-  network({
+  Promise.resolve({
     results: councils[id]
   });
 
@@ -100,7 +104,7 @@ const getPlace = (id: string): Promise<{ results?: Place }> =>
   });
 
 const searchCouncil = (query: string): Promise<{ results: Council[] }> =>
-  network({
+  Promise.resolve({
     results: Object.values(councils).filter(item =>
       item.name.toLowerCase().includes(query.toLowerCase())
     )

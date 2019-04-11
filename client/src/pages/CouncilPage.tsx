@@ -14,6 +14,7 @@ import CouncilSidebar from "../CouncilSidebar";
 import DocumentPreview from "../DocumentPreview";
 import { useArray } from "../hooks/useArray";
 import AggregateChips from "../AggregateChips";
+import Logo from "../Logo";
 
 const Container = styled.div`
   align-items: center;
@@ -27,7 +28,7 @@ const Body = styled.div`
 `;
 
 const InfoWrapper = styled.div`
-  padding: 2em;
+  padding: 5em;
   text-align: center;
 `;
 
@@ -99,7 +100,9 @@ const CouncilPage = ({ id }: CouncilPageProps) => {
               </InfoWrapper>
             )
           ) : (
-            <InfoWrapper>Loading ...</InfoWrapper>
+            <InfoWrapper>
+              <Logo animate width={150} lineColor="#333" />
+            </InfoWrapper>
           )}
         </Body>
       </InfoPage>

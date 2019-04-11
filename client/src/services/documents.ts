@@ -34,7 +34,7 @@ export interface Contract extends SearchHit {
 export interface Petition extends SearchHit {
   index: "council-petitions";
   fields: {
-    signatures: string;
+    signatures: string[];
     description: string;
     petitionLink: string;
     backgroundInfo: string;

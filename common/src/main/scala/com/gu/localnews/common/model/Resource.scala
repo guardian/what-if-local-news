@@ -3,7 +3,7 @@ package com.gu.localnews.common.model
 import com.gu.localnews.common._
 import play.api.libs.json._
 
-case class Resource(id: String, index: String, title: String, fields: ResourceFields)
+case class Resource(index: String, id: String, title: String, fields: ResourceFields)
 trait ResourceFields
 
 object ResourceFields {

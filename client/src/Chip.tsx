@@ -6,6 +6,7 @@ type ChipProps = {
   label: string;
   children: JSX.Element | string;
   isActive?: boolean;
+  button?: boolean;
 } & ButtonHTMLAttributes<HTMLButtonElement>;
 
 const ChipWrapper = styled.button`
@@ -39,11 +40,13 @@ const ChipToggle = styled(Paper)<{ isActive?: boolean }>`
   padding: 0.5em;
 `;
 
-const Chip = ({ label, children, isActive, ...rest }: ChipProps) => (
-  <ChipWrapper {...rest} ref={undefined}>
+const Chip = ({ label, children, isActive, button, ...rest }: ChipProps) => (
+  <ChipWrapper disabled={!button} {...rest} ref={undefined}>
     <ChipLabel isActive={isActive}>{label}</ChipLabel>
     <ChipValue isActive={isActive}>{children}</ChipValue>
-    <ChipToggle isActive={isActive}>{isActive ? "-" : "+"}</ChipToggle>
+    {button && (
+      <ChipToggle isActive={isActive}>{isActive ? "-" : "+"}</ChipToggle>
+    )}
   </ChipWrapper>
 );
 
