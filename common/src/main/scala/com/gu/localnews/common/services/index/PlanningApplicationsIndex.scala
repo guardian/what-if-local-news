@@ -45,7 +45,7 @@ trait PlanningApplicationsIndex {
 
   }
 
-  def insertPlanningApplications(application: PlanningApplication)(implicit ec: ExecutionContext): Unit ={
+  def insertPlanningApplications(application: PlanningApplication)(implicit ec: ExecutionContext) ={
     val values = Map(
       "address" -> application.address,
       "caseRef" -> application.caseRef,
@@ -68,11 +68,14 @@ trait PlanningApplicationsIndex {
       application.applicationLink.map("applicationLink" -> _)
 
 
-    client.execute(indexInto("planning-applications" / "_doc").fields(values)).andThen {
+    val future = client.execute(indexInto("planning-applications" / "_doc").fields(values))
+    
+    future.andThen {
       case Success(response) => println(s"Successfully inserted document ${response.result}")
       case Failure(why) => println(s"Failed to insert document ${why}")
     }
 
+    future
   }
 
 }

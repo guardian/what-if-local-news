@@ -2,22 +2,27 @@ package com.gu.localnews.cli
 
 import java.util.concurrent.Executors
 
-import com.gu.localnews.cli.parsers.{ContractParser, PlanningApplicationParser, PetitionParser}
+import com.gu.localnews.cli.parsers.{
+  ContractParser,
+  PlanningApplicationParser,
+  PetitionParser
+}
 import com.gu.localnews.common.services.index.{Index, ElasticsearchClient}
 
 import scala.concurrent.ExecutionContext
-
+import scala.concurrent.Future
 
 object Main extends App {
   import scala.language.reflectiveCalls
 
-  implicit val ec = ExecutionContext.fromExecutor(Executors.newFixedThreadPool(2))
+  implicit val ec =
+    ExecutionContext.fromExecutor(Executors.newFixedThreadPool(2))
 
   val client = ElasticsearchClient(List("http://127.0.0.1:9200"))
 
   val options = new Args(args)
 
-  options.`type`() match {
+  val futures = options.`type`() match {
     case ImportType.CouncilContracts =>
       // Setup first time IS THIS RIGHT?
       val index = new Index(client)
@@ -26,7 +31,7 @@ object Main extends App {
       val total = contracts.length
       var i = 0
 
-      contracts.foreach { c =>
+      contracts.map { c =>
         i += 1
         println(s"$i/$total")
         index.insertCouncilContracts(c)
@@ -39,7 +44,7 @@ object Main extends App {
       val total = apps.length
       var i = 0
 
-      apps.foreach { a =>
+      apps.map { a =>
         i += 1
         println(s"$i/$total")
         index.insertPlanningApplications(a)
@@ -50,12 +55,12 @@ object Main extends App {
       index.setupCouncilPetitions()
       val petitions = PetitionParser.parse(options.file())
 
-      petitions.foreach { p =>
+      petitions.map { p =>
         index.insertCouncilPetitions(p)
       }
 
-    case _ =>
+    case _ => List(Future.successful(()))
   }
 
-  System.exit(0)
+  Future.sequence(futures).onComplete((_) => System.exit(0))
 }
