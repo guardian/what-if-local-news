@@ -1,11 +1,11 @@
 import React from "react";
 import Omni from "../Omni";
 import {
-  DocumentWithPeopleAndPlaces,
   search,
   getCouncil,
   CouncilWithPeopleAndKeyPhrases
 } from "../services/CouncillorService";
+import { Document } from "../services/documents";
 import styled from "styled-components";
 import { useDebouncedQuery } from "../hooks/useDebouncedQuery";
 import { useAsync } from "../hooks/useAsync";
@@ -35,9 +35,11 @@ const CouncilPage = ({ id }: CouncilPageProps) => {
     CouncilWithPeopleAndKeyPhrases["keyphrases"][number]
   >();
   const [results, loading, query, setQuery] = useDebouncedQuery(
-    (query: string) => search({ query, councilId: id }).then(r => r.results),
-    [] as DocumentWithPeopleAndPlaces[],
-    500
+    (query, tags) => search({ query, tags }),
+    [] as Document[],
+    500,
+    "",
+    tags
   );
   const [council] = useAsync(
     (id: string) => getCouncil(id).then(res => res.results),
@@ -51,13 +53,13 @@ const CouncilPage = ({ id }: CouncilPageProps) => {
           <div style={{ padding: "3rem", textAlign: "center" }}>
             <h4 style={{ margin: 0 }}>Key phrases</h4>
             {council.keyphrases.map(keyphrase => (
-              <KeyPhrase key={keyphrase.phrase}>
+              <KeyPhrase key={keyphrase}>
                 <button
                   onClick={() => {
                     if (!tags.includes(keyphrase)) push(keyphrase);
                   }}
                 >
-                  {keyphrase.phrase}
+                  {keyphrase}
                 </button>
               </KeyPhrase>
             ))}
@@ -69,14 +71,17 @@ const CouncilPage = ({ id }: CouncilPageProps) => {
             onChange={setQuery}
           />
           {tags.map((keyphrase, i) => (
-            <KeyPhrase key={keyphrase.phrase}>
-              <button onClick={() => remove(i)}>{keyphrase.phrase}</button>
+            <KeyPhrase key={keyphrase}>
+              <button onClick={() => remove(i)}>{keyphrase}</button>
             </KeyPhrase>
           ))}
           <ol>
             {results.map(document => (
               <li key={document.id}>
-                <DocumentPreview document={document} searchString={query} />
+                <DocumentPreview
+                  document={document}
+                  searchStrings={[query, ...tags]}
+                />
               </li>
             ))}
           </ol>

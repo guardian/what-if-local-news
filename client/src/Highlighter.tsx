@@ -1,17 +1,24 @@
 import React from "react";
 type HighlighterProps = {
   string: string;
-  substring?: string;
+  substrings?: string[];
   renderMatch: (substring: string) => JSX.Element;
 };
 
-const Highlighter = ({ string, substring, renderMatch }: HighlighterProps) => (
+const Highlighter = ({ string, substrings, renderMatch }: HighlighterProps) => (
   <>
-    {substring
+    {substrings
       ? string
-          .split(new RegExp(`(${substring})`, "gi"))
+          .split(new RegExp(`(${substrings.join("|")})`, "gi"))
           .reduce(
-            (acc, str, i) => [...acc, i % 2 ? renderMatch(str) : str],
+            (acc, str, i) => [
+              ...acc,
+              i % 2 ? (
+                <React.Fragment key={i}>{renderMatch(str)}</React.Fragment>
+              ) : (
+                str
+              )
+            ],
             [] as (JSX.Element | string)[]
           )
       : string}

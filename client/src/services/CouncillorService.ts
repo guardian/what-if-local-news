@@ -1,4 +1,4 @@
-import { documents, Document } from "./documents";
+import { Document } from "./documents";
 import { places, Place } from "./places";
 import { people, Person } from "./people";
 import { councils, Council } from "./councils";
@@ -28,10 +28,7 @@ export type CouncilWithPeopleAndKeyPhrases = Replace<
   Council,
   {
     people: Person[];
-    keyphrases: {
-      documentId: string;
-      phrase: string;
-    }[];
+    keyphrases: string[];
   }
 >;
 
@@ -49,55 +46,42 @@ const joinWithPlaces = <T extends { places: string[] }>(
   places: item.places.map(placeId => places[placeId])
 });
 
-const joinEnitityWithDocs = (person: Person): PersonWithDocuments => ({
-  ...person,
-  documents: Object.values(documents).filter(doc =>
-    doc.people.includes(person.id)
-  )
-});
+// const joinEnitityWithDocs = (person: Person): PersonWithDocuments => ({
+//   ...person,
+//   documents: Object.values(documents).filter(doc =>
+//     doc.people.includes(person.id)
+//   )
+// });
 
-const joinPlaceWithFilledDocs = (
-  place: Place
-): PlaceWithDocumentsAndDocumentPeople => ({
-  ...place,
-  documents: Object.values(documents)
-    .filter(doc => doc.people.includes(place.id))
-    .map(joinWithPeople)
-});
-
-const searchableFields = ["name", "text"] as ["name", "text"];
+// const joinPlaceWithFilledDocs = (
+//   place: Place
+// ): PlaceWithDocumentsAndDocumentPeople => ({
+//   ...place,
+//   documents: Object.values(documents)
+//     .filter(doc => doc.people.includes(place.id))
+//     .map(joinWithPeople)
+// });
 
 const search = ({
   query,
-  councilId
+  tags
 }: {
-  query?: string;
-  councilId?: string;
-}): Promise<{ results: DocumentWithPeopleAndPlaces[] }> =>
-  network({
-    results: Object.values(documents)
-      .filter(
-        item =>
-          (typeof councilId === "undefined" || councilId === item.councilId) &&
-          (typeof query === "undefined" ||
-            searchableFields.find(field =>
-              item[field].toLowerCase().includes(query.toLowerCase())
-            ))
-      )
-      .map(joinWithPeople)
-      .map(joinWithPlaces)
-  });
+  query: string;
+  tags: string[];
+}): Promise<Document[]> =>
+  fetch(
+    `/api/search?q=${[query, ...tags]
+      .filter(Boolean)
+      .map(t => `(${t})`)
+      .join("AND")}`
+  ).then(res => res.json());
 
-const getDocument = (
-  id: string
-): Promise<{ results?: DocumentWithPeopleAndPlaces }> =>
-  network({
-    results: joinWithPlaces(joinWithPeople(documents[id]))
-  });
+const getDocument = (id: string): Promise<{ results?: Document }> =>
+  network({}); // todo implement
 
-const getPerson = (id: string): Promise<{ results?: PersonWithDocuments }> =>
+const getPerson = (id: string): Promise<{ results?: Person }> =>
   network({
-    results: joinEnitityWithDocs(people[id])
+    results: people[id]
   });
 
 const getCouncil = (
@@ -106,26 +90,13 @@ const getCouncil = (
   network({
     results: {
       ...joinWithPeople(councils[id]),
-      keyphrases: Object.values(documents)
-        .filter(doc => doc.councilId === id)
-        .reduce(
-          (acc, doc) => [
-            ...acc,
-            ...doc.keyphrases.map(phrase => ({
-              documentId: doc.id,
-              phrase
-            }))
-          ],
-          [] as { documentId: string; phrase: string }[]
-        )
+      keyphrases: ["heat"]
     }
   });
 
-const getPlace = (
-  id: string
-): Promise<{ results?: PlaceWithDocumentsAndDocumentPeople }> =>
+const getPlace = (id: string): Promise<{ results?: Place }> =>
   network({
-    results: joinPlaceWithFilledDocs(places[id])
+    results: places[id]
   });
 
 const searchCouncil = (query: string): Promise<{ results: Council[] }> =>

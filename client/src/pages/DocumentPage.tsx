@@ -1,8 +1,6 @@
 import React from "react";
-import {
-  DocumentWithPeopleAndPlaces,
-  getDocument
-} from "../services/CouncillorService";
+import { getDocument } from "../services/CouncillorService";
+import { Document as TDocument } from "../services/documents";
 import Document from "../Document";
 import { useAsync } from "../hooks/useAsync";
 
@@ -13,7 +11,7 @@ type DocumentProps = {
 const DocumentPage = ({ id }: DocumentProps) => {
   const [document] = useAsync(
     (id: string) => getDocument(id).then(res => res.results),
-    null as DocumentWithPeopleAndPlaces | null | undefined,
+    null as TDocument | null | undefined,
     id
   );
 

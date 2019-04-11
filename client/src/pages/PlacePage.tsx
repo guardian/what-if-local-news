@@ -1,16 +1,12 @@
 import React from "react";
-import {
-  PlaceWithDocumentsAndDocumentPeople,
-  getPlace
-} from "../services/CouncillorService";
+import { getPlace } from "../services/CouncillorService";
+import { Place } from "../services/places";
 import { useAsync } from "../hooks/useAsync";
 import PlaceGraph from "../PlaceGraph";
 import Paper from "../Paper";
 import InfoPage from "../InfoPage";
 import { SidebarTitle } from "../SidebarTitle";
 import Title from "../Title";
-import Link from "../routing/Link";
-import { documentRoute } from "../routes";
 
 type PlacePageProps = {
   id: string;
@@ -19,7 +15,7 @@ type PlacePageProps = {
 const PlacePage = ({ id }: PlacePageProps) => {
   const [place] = useAsync(
     (id: string) => getPlace(id).then(res => res.results),
-    null as PlaceWithDocumentsAndDocumentPeople | null | undefined,
+    null as Place | null | undefined,
     id
   );
 
@@ -35,14 +31,14 @@ const PlacePage = ({ id }: PlacePageProps) => {
         <>
           <SidebarTitle>Connected documents</SidebarTitle>
           <Paper>
-            <PlaceGraph
+            {/* {<PlaceGraph
               place={place}
               style={{
                 height: "300px",
                 width: "100%",
                 borderBottom: "1px solid black"
               }}
-            />
+            />} */}
           </Paper>
         </>
       }

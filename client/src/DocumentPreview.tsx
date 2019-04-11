@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "./routing/Link";
-import { DocumentWithPeopleAndPlaces } from "./services/CouncillorService";
+import { Document } from "./services/documents";
 import styled from "styled-components";
 import Paper from "./Paper";
 import Highlighter from "./Highlighter";
@@ -52,36 +52,92 @@ const Chip = ({ label, children }: ChipProps) => (
   </ChipWrapper>
 );
 
-type DocumentPreviewProps = {
-  document: DocumentWithPeopleAndPlaces;
-  searchString?: string;
+type DocumentPreviewContainerProps = {
+  highlights: string[];
+  searchStrings?: string[];
+  title: string;
+  path: string;
+  chips: { label: string; value: string }[];
 };
 
-const DocumentPreview = ({ document, searchString }: DocumentPreviewProps) => (
+const DocumentPreviewContainer = ({
+  highlights,
+  searchStrings,
+  title,
+  path,
+  chips
+}: DocumentPreviewContainerProps) => (
   <Container>
     <Title>
-      <Link path={`/council/${document.councilId}/document/${document.id}`}>
-        <Highlighter
-          string={document.name}
-          substring={searchString}
-          renderMatch={str => <Highlight>{str}</Highlight>}
-        />
-      </Link>
+      <Link path={path}>{title}</Link>
     </Title>
     <MetaContainer>
-      <Chip label="Date">
-        {new Date(document.date).toLocaleDateString("en-gb")}
-      </Chip>
-      <Chip label="Type">{document.type}</Chip>
+      {chips.map(chip => (
+        <Chip key={chip.label} label={chip.label}>
+          {chip.value}
+        </Chip>
+      ))}
     </MetaContainer>
     <div>
-      <Highlighter
-        string={document.text}
-        substring={searchString}
-        renderMatch={str => <Highlight>{str}</Highlight>}
-      />
+      {highlights.map(highlight => (
+        <Highlighter
+          key={highlight}
+          string={highlight}
+          substrings={searchStrings}
+          renderMatch={str => <Highlight>{str}</Highlight>}
+        />
+      ))}
     </div>
   </Container>
 );
+
+type DocumentPreviewProps = {
+  document: Document;
+  searchStrings?: string[];
+};
+
+const DocumentPreview = ({ document, searchStrings }: DocumentPreviewProps) => {
+  switch (document.index) {
+    case "planning-applications": {
+      return (
+        <DocumentPreviewContainer
+          highlights={document.highlights || []}
+          searchStrings={searchStrings}
+          title={document.title}
+          path=""
+          chips={[
+            { value: document.index, label: "Type" },
+            { value: document.fields.dateReceived, label: "Date received" }
+          ]}
+        />
+      );
+    }
+    case "council-petitions": {
+      return (
+        <DocumentPreviewContainer
+          highlights={document.highlights || []}
+          searchStrings={searchStrings}
+          title={document.title}
+          path=""
+          chips={[{ value: document.index, label: "Type" }]}
+        />
+      );
+    }
+    case "council-contracts": {
+      return (
+        <DocumentPreviewContainer
+          highlights={document.highlights || []}
+          searchStrings={searchStrings}
+          title={document.title}
+          path=""
+          chips={[{ value: document.index, label: "Type" }]}
+        />
+      );
+    }
+    default: {
+      return null;
+    }
+  }
+};
 
 export default DocumentPreview;

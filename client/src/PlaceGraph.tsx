@@ -26,7 +26,7 @@ const PlaceGraph = ({
     ...place.documents.reduce(
       (acc, d): [string, string][] => [
         ...acc,
-        [documentRoute(d), `Document: ${d.name}`],
+        [documentRoute(d), `Document: ${d.title}`],
         ...d.people.map(
           (p): [string, string] => [personRoute(p), `Person: ${p.name}`]
         )
