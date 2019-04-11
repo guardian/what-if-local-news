@@ -1,5 +1,8 @@
 package com.gu.localnews.common
 
+import com.gu.localnews.common.model.ResourceFields
+import play.api.libs.json.Json
+
 case class CouncilContract(title: String,
                            organisationName: String,
                            description: String,
@@ -10,6 +13,8 @@ case class CouncilContract(title: String,
                            awardedDate: Option[String],
                            awardedValue: Option[Float],
                            suppliers: Option[List[ContractSupplier]],
-                           entities: DocumentEntities)
+                           entities: DocumentEntities) extends ResourceFields
 
-
+object CouncilContract {
+  implicit val format = Json.format[CouncilContract]
+}

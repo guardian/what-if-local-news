@@ -31,6 +31,8 @@ object PlanningApplicationParser {
         case Some(c) => entities.addOrganisation(c)
         case None =>
       }
+      // TODO entity extraction on the proposal
+
       entities.addPlace(address)
       entities.addDate(dateReceived)
 
