@@ -3,6 +3,7 @@ import Link from "./routing/Link";
 import { Document } from "./services/documents";
 import styled from "styled-components";
 import Paper from "./Paper";
+import Chip from "./Chip";
 
 const Container = styled(Paper)`
   margin-bottom: 1em;
@@ -11,44 +12,16 @@ const Container = styled(Paper)`
 
 const Title = styled.h3`
   margin: 0;
+  overflow: hidden;
   text-decoration: underline;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `;
-
-type ChipProps = {
-  label: string;
-  children: string;
-};
 
 const MetaContainer = styled.div`
   font-size: 14px;
   margin: 1em 0;
 `;
-
-const ChipWrapper = styled.div`
-  display: inline-block;
-  margin-right: 0.5em;
-`;
-
-const ChipLabel = styled(Paper)`
-  background: #9e5ace;
-  color: #fff;
-  display: inline-block;
-  padding: 0.5em;
-`;
-
-const ChipValue = styled(Paper)`
-  background: #fff;
-  color: #9e5ace;
-  display: inline-block;
-  padding: 0.5em;
-`;
-
-const Chip = ({ label, children }: ChipProps) => (
-  <ChipWrapper>
-    <ChipLabel>{label}</ChipLabel>
-    <ChipValue>{children}</ChipValue>
-  </ChipWrapper>
-);
 
 type DocumentPreviewContainerProps = {
   highlights: string[];
@@ -73,7 +46,9 @@ const DocumentPreviewContainer = ({
 }: DocumentPreviewContainerProps) => (
   <Container>
     <Title>
-      <Link path={path}>{title}</Link>
+      <Link title={title} path={path}>
+        {title}
+      </Link>
     </Title>
     <MetaContainer>
       {chips.map(chip => (
@@ -83,7 +58,7 @@ const DocumentPreviewContainer = ({
       ))}
     </MetaContainer>
     <div>
-      {highlights.map(highlight => (
+      {[...new Set(highlights)].map(highlight => (
         <Highlight
           key={highlight}
           dangerouslySetInnerHTML={{ __html: highlight }}
