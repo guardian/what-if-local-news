@@ -7,6 +7,8 @@
 GET     /                                                    controllers.HomeController.index
 
 GET     /api/search                                          controllers.Search.search(q: String)
+GET     /api/resources/:index/:id                            controllers.Resources.getResources(index, id)
+
 GET     /api/management/healthcheck                          controllers.Management.healthCheck
 
 # Map static resources from the /public folder to the /assets URL path

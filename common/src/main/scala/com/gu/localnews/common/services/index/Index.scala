@@ -1,6 +1,6 @@
 package com.gu.localnews.common.services.index
 
-import com.gu.localnews.common.model.{SearchHit, SearchParameters, SearchResults, SignificantTerm}
+import com.gu.localnews.common.model._
 import com.sksamuel.elastic4s.FetchSourceContext
 import com.sksamuel.elastic4s.http.ElasticClient
 import com.sksamuel.elastic4s.http.ElasticDsl._
@@ -12,6 +12,17 @@ class Index(val client: ElasticClient)
   extends CouncilContractsIndex
     with PlanningApplicationsIndex
     with CouncilPetitionsIndex {
+
+  def getResource(index: String, id: String)(implicit ec: ExecutionContext) = {
+    client.execute(
+      get(index, "_doc", id)
+    ).map { resp =>
+      val allFields = resp.result.sourceAsMap
+
+      Resource.fromMap(resp.result.index, resp.result.id, allFields)
+    }
+  }
+
   def query(searchParams: SearchParameters)(implicit ec: ExecutionContext) = {
 
     def hitField(hit: Map[String, AnyRef], fieldName: String): (String, String) = {

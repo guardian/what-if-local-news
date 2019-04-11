@@ -1,5 +1,7 @@
 package com.gu.localnews.common
 
+import play.api.libs.json.Json
+
 case class ContractSupplier(name: String,
                             address: String,
                             refType: Option[String],
@@ -8,6 +10,8 @@ case class ContractSupplier(name: String,
                             isVCSE: Boolean)
 
 object ContractSupplier {
+  implicit val format = Json.format[ContractSupplier]
+
   def fromStringFormat(text: String): List[ContractSupplier] = {
     text.split("\\]\\[").map { supplier =>
       val bits = supplier.stripPrefix("[").split("|").map(_.trim())

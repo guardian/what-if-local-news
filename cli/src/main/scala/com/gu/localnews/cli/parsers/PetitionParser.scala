@@ -29,6 +29,8 @@ object PetitionParser {
         case None => DocumentEntities().addPerson(creator)
       }
 
+      // TODO entity extraction on petition-description and petition-background-info
+
       CouncilPetition(
         row("petition"),
         row("petition-href"),
