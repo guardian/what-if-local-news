@@ -41,6 +41,7 @@ type LogoProps = {
   animate?: boolean;
   style?: React.CSSProperties;
   width: number;
+  lineColor?: string;
 };
 
 const circleDs = [
@@ -103,10 +104,14 @@ const lineDs = [
   "M352.75 94.19l2.65-1.07"
 ];
 
-const lineColor = "#fff";
-const colors = ["#75f8fa", "#d08eff"] as [string, string];
+const colors = ["#75f8fa", "#9e5ace"] as [string, string];
 
-const Logo = ({ animate = false, width, style }: LogoProps) => (
+const Logo = ({
+  animate = false,
+  width,
+  style,
+  lineColor = "#fff"
+}: LogoProps) => (
   <Svg
     xmlns="http://www.w3.org/2000/svg"
     xmlnsXlink="http://www.w3.org/1999/xlink"
@@ -125,7 +130,7 @@ const Logo = ({ animate = false, width, style }: LogoProps) => (
         colors={[colors[i % 2], colors[(i + 1) % 2]]}
         animate={animate}
         style={{
-          animationDuration: `${1 + Math.random() * 2}s`
+          animationDuration: `${0.5 + Math.random()}s`
         }}
       />
     ))}

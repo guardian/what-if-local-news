@@ -39,7 +39,7 @@ const capitalize = (str: string) =>
 const typeToTitle = (type: string) => capitalize(type.split("_")[1]);
 
 const Wrapper = styled(Paper)`
-  background: #f4f4f4;
+  background: #eeeef1;
   margin-top: 1em;
   padding: 1em;
 `;
@@ -64,7 +64,7 @@ const AggregateChips = ({
     .filter(([, aggs]) => aggs.length);
   return !!filters.length ? (
     <Wrapper>
-      <Titles>Filters</Titles>
+      <Titles>Significant terms</Titles>
       {filters.map(([type, aggs]) => (
         <div key={type}>
           <Types>{typeToTitle(type)}</Types>

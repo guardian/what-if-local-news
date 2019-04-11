@@ -6,12 +6,14 @@ import { useAsync } from "../hooks/useAsync";
 
 type DocumentProps = {
   id: string;
+  index: string;
 };
 
-const DocumentPage = ({ id }: DocumentProps) => {
+const DocumentPage = ({ id, index }: DocumentProps) => {
   const [document] = useAsync(
-    (id: string) => getDocument(id).then(res => res.results),
+    (index: string, id: string) => getDocument(index, id),
     null as TDocument | null | undefined,
+    index,
     id
   );
 
