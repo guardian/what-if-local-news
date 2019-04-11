@@ -3,8 +3,6 @@ import Link from "./routing/Link";
 import { Document } from "./services/documents";
 import styled from "styled-components";
 import Paper from "./Paper";
-import Highlighter from "./Highlighter";
-import Highlight from "./Highlight";
 
 const Container = styled(Paper)`
   margin-bottom: 1em;
@@ -60,6 +58,12 @@ type DocumentPreviewContainerProps = {
   chips: { label: string; value: string }[];
 };
 
+const Highlight = styled.div`
+  em {
+    background-color: yellow;
+  }
+`;
+
 const DocumentPreviewContainer = ({
   highlights,
   searchStrings,
@@ -80,11 +84,9 @@ const DocumentPreviewContainer = ({
     </MetaContainer>
     <div>
       {highlights.map(highlight => (
-        <Highlighter
+        <Highlight
           key={highlight}
-          string={highlight}
-          substrings={searchStrings}
-          renderMatch={str => <Highlight>{str}</Highlight>}
+          dangerouslySetInnerHTML={{ __html: highlight }}
         />
       ))}
     </div>
