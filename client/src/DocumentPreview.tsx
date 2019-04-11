@@ -121,7 +121,7 @@ const DocumentPreview = ({ document, searchStrings }: DocumentPreviewProps) => {
           highlights={document.highlights || []}
           searchStrings={searchStrings}
           title={document.title}
-          path=""
+          path={`/document/${document.index}/${document.id}`}
           chips={[{ value: document.index, label: "Type" }]}
         />
       );
@@ -132,7 +132,7 @@ const DocumentPreview = ({ document, searchStrings }: DocumentPreviewProps) => {
           highlights={document.highlights || []}
           searchStrings={searchStrings}
           title={document.title}
-          path=""
+          path={`/document/${document.index}/${document.id}`}
           chips={[{ value: document.index, label: "Type" }]}
         />
       );
