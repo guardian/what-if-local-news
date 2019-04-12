@@ -3,6 +3,7 @@ package com.gu.localnews.cli.parsers
 import java.io.File
 
 import com.github.tototoshi.csv._
+import com.gu.localnews.cli.services.NLP
 import com.gu.localnews.common.{ContractSupplier, CouncilContract, DocumentEntities}
 
 object ContractParser {
@@ -17,12 +18,14 @@ object ContractParser {
       val org = row("Organisation Name")
       val suppliers = readFromMap("Supplier [Name|Address|Ref type|Ref Number|Is SME|Is VCSE]", row).map(ContractSupplier.fromStringFormat)
 
-      val entities = suppliers match {
+      var entities = suppliers match {
         case Some(s) => s.foldLeft(DocumentEntities().addOrganisation(org)) { (acc, supplier) =>
           acc.addOrganisation(supplier.name)
         }
         case None => DocumentEntities().addOrganisation(org)
       }
+
+      entities = NLP.mergeEntities(entities, NLP.process(row("Description")))
 
       CouncilContract(
         row("Title"),

@@ -3,6 +3,7 @@ package com.gu.localnews.cli.parsers
 import java.io.File
 
 import com.github.tototoshi.csv.CSVReader
+import com.gu.localnews.cli.services.NLP
 import com.gu.localnews.common.{DocumentEntities, PlanningApplication}
 
 object PlanningApplicationParser {
@@ -21,20 +22,21 @@ object PlanningApplicationParser {
       val address = row("address")
       val dateReceived = row("date-received")
 
-      val entities = DocumentEntities()
+      var entities = DocumentEntities()
 
       name match {
-        case Some(n) => entities.addPerson(n)
+        case Some(n) => entities = entities.addPerson(n)
         case None =>
       }
       company match {
-        case Some(c) => entities.addOrganisation(c)
+        case Some(c) => entities = entities.addOrganisation(c)
         case None =>
       }
-      // TODO entity extraction on the proposal
 
-      entities.addPlace(address)
-      entities.addDate(dateReceived)
+      entities = entities.addPlace(address)
+      entities = entities.addDate(dateReceived)
+
+      entities = NLP.mergeEntities(entities, NLP.process(row("proposal")))
 
       PlanningApplication(
         address,

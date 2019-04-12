@@ -3,6 +3,7 @@ package com.gu.localnews.cli.parsers
 import java.io.File
 
 import com.github.tototoshi.csv.CSVReader
+import com.gu.localnews.cli.services.NLP
 import com.gu.localnews.common.{CouncilPetition, DocumentEntities, PetitionSignature}
 
 object PetitionParser {
@@ -22,14 +23,15 @@ object PetitionParser {
       val signatures = readFromMap("petition-signatures", row).map(PetitionSignature.fromStringFormat)
 
 
-      val entities = signatures match {
+      var entities = signatures match {
         case Some(s) => s.foldLeft(DocumentEntities().addPerson(creator)){(acc, signature) =>
           acc.addPerson(signature.name)
         }
         case None => DocumentEntities().addPerson(creator)
       }
 
-      // TODO entity extraction on petition-description and petition-background-info
+      entities = NLP.mergeEntities(entities, NLP.process(row("petition-description")))
+      entities = NLP.mergeEntities(entities, NLP.process(row("petition-background-info")))
 
       CouncilPetition(
         row("petition"),

@@ -2,12 +2,9 @@ package com.gu.localnews.cli
 
 import java.util.concurrent.Executors
 
-import com.gu.localnews.cli.parsers.{
-  ContractParser,
-  PlanningApplicationParser,
-  PetitionParser
-}
-import com.gu.localnews.common.services.index.{Index, ElasticsearchClient}
+import com.gu.localnews.cli.parsers.{ContractParser, PetitionParser, PlanningApplicationParser}
+import com.gu.localnews.cli.services.NLP
+import com.gu.localnews.common.services.index.{ElasticsearchClient, Index}
 
 import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
@@ -21,6 +18,7 @@ object Main extends App {
   val client = ElasticsearchClient(List("http://127.0.0.1:9200"))
 
   val options = new Args(args)
+  NLP.analyser = Some(options.extractor())
 
   val futures = options.`type`() match {
     case ImportType.CouncilContracts =>
