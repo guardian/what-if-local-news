@@ -8,6 +8,14 @@ Get docker up: `docker-compose up`
 
 This will spin up an instance of ElasticSearch in a local Docker. 
 
+In another tab fire up the scala app: 
+`sbt` > `project frontend` > `run`
+
+In another tab run the react app:
+In the `client` folder run `yarn start` to kickstart the React build 
+
+## To add a file with the cli
+
 To insert a file into the ES instance, you need to use the `cli`.
 
 1. Get into sbt: `sbt`
@@ -21,6 +29,8 @@ As a convenience for people that have the original seed data you can also drop t
 
 To view the inserted results navigate to the hardcoded localhost port: `http://127.0.0.1:9200/`
 And look at the index you have just created: `http://127.0.0.1:9200/council-contracts/_search?q=*`
+
+
 
 ### Other docker commands
 
