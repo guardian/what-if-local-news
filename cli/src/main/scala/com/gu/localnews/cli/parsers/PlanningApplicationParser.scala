@@ -31,6 +31,8 @@ object PlanningApplicationParser {
         case Some(c) => entities.addOrganisation(c)
         case None =>
       }
+      // TODO entity extraction on the proposal
+
       entities.addPlace(address)
       entities.addDate(dateReceived)
 
@@ -41,7 +43,7 @@ object PlanningApplicationParser {
         name,
         company,
         readFromMap("application-type", row),
-        row("application-link"),
+        row.get("application-link"),
         row("proposal"),
         dateReceived,
         row("status"),

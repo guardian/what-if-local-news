@@ -2,7 +2,8 @@ import styled from "styled-components";
 import Title from "./Title";
 
 const SidebarTitle = styled(Title)`
-  background: #222;
+  background: #133c55;
+  color: #fff;
   padding: 1em;
 `;
 

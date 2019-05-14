@@ -4,7 +4,7 @@ import Paper from "./Paper";
 
 const Container = styled.section`
   display: grid;
-  grid-template-columns: 1fr 400px;
+  grid-template-columns: minmax(0, 1fr) 400px;
   grid-column-gap: 1em;
   height: 100%;
   width: 100%;

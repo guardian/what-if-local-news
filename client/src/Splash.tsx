@@ -8,7 +8,6 @@ type SplashProps = {
 
 const Container = styled.div`
   align-items: center;
-  background: #333;
   display: flex;
   height: 100%;
   justify-content: center;
@@ -24,7 +23,7 @@ const Splash = ({ children }: SplashProps) => {
     children
   ) : (
     <Container>
-      <Logo width={300} animate />
+      <Logo width={300} lineColor="#aaa" animate />
     </Container>
   );
 };

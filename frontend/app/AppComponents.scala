@@ -23,6 +23,7 @@ class AppComponents(context: Context, config: Config)
     httpErrorHandler,
     new HomeController(cc),
     new Search(index, cc),
+    new Resources(index, cc),
     new Management(cc),
     assets
   )

@@ -16,7 +16,7 @@ const Container = styled.div`
 `;
 
 const Header = styled.header`
-  background-color: #222;
+  background-color: #0f2f43;
   padding: 1em;
 `;
 
@@ -47,11 +47,12 @@ const SubTitle = styled.h2`
 `;
 
 const Main = styled.main`
+  background: #f4f4f4;
   overflow-y: auto;
 `;
 
 const Footer = styled.footer`
-  background-color: #222;
+  background-color: #0f2f43;
   color: #fff;
   padding: 1em;
 `;

@@ -22,7 +22,9 @@ const App = () => (
           routes={{
             "/": () => <CouncilPickerPage />,
             "/council/:id": ({ id }) => <CouncilPage id={id} />,
-            "/council/:id/document/:id": ({ id }) => <DocumentPage id={id} />,
+            "/document/:index/:id": ({ id, index }) => (
+              <DocumentPage id={id} index={index} />
+            ),
             "/person/:id": ({ id }) => <PersonPage id={id} />,
             "/place/:id": ({ id }) => <PlacePage id={id} />
           }}

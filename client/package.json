@@ -5,6 +5,7 @@
   "dependencies": {
     "@types/leaflet": "^1.4.3",
     "@types/pdfjs-dist": "^2.0.0",
+    "http-proxy-middleware": "^0.19.1",
     "leaflet": "^1.4.0",
     "path-to-regexp": "^3.0.0",
     "pdfjs-dist": "^2.0.943",

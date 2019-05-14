@@ -37,12 +37,12 @@ const createGraphSVGRenderer = (graph: TGraph) => {
   svg.style.width = "100%";
   svg.style.height = "100%";
   const nodeEls = Object.values(graph.nodes).map(nodeEl("#fff"));
-  const edgeEls = Object.values(graph.edges).map(edgeEl("#333"));
+  const edgeEls = Object.values(graph.edges).map(edgeEl("#ddd"));
   const textEls = Object.values(graph.nodes).map(textEl("#333"));
 
   return {
     append: (parent: HTMLElement) => {
-      svg.setAttribute("viewBox", `-150 -150 300 300`);
+      svg.setAttribute("viewBox", `-200 -200 400 400`);
       parent.appendChild(svg);
       edgeEls.forEach(el => svg.appendChild(el));
       nodeEls.forEach(el => svg.appendChild(el));
