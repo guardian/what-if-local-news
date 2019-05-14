@@ -65,7 +65,7 @@ const Layout = ({ children }: LayoutProps) => (
           <Logo width={50} />
         </LogoWrapper>
         <TitleWrapper>
-          <MainTitle>Councillor</MainTitle>
+          <MainTitle>Harvester</MainTitle>
           <SubTitle>structured data from local councils</SubTitle>
         </TitleWrapper>
       </Link>
