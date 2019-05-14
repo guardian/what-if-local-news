@@ -30,6 +30,9 @@ As a convenience for people that have the original seed data you can also drop t
 To view the inserted results navigate to the hardcoded localhost port: `http://127.0.0.1:9200/`
 And look at the index you have just created: `http://127.0.0.1:9200/council-contracts/_search?q=*`
 
+## To add a new type of file
+
+New types of file need to have new data parsing models associated with them. These are found in the `cli` directory under `parsers`.  
 
 
 ### Other docker commands
