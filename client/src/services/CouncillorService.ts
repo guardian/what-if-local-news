@@ -3,8 +3,7 @@ import { places, Place } from "./places";
 import { people, Person } from "./people";
 import { councils, Council } from "./councils";
 
-const network = <T>(val: T): Promise<T> =>
-  new Promise(res => setTimeout(() => res(val), Math.random() * 2000));
+const network = <T>(val: T): Promise<T> => Promise.resolve(val);
 
 type Replace<T extends object, O extends object> = Pick<
   T,

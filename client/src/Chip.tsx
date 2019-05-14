@@ -41,7 +41,7 @@ const ChipToggle = styled(Paper)<{ isActive?: boolean }>`
 `;
 
 const Chip = ({ label, children, isActive, button, ...rest }: ChipProps) => (
-  <ChipWrapper disabled={!button} {...rest} ref={undefined}>
+  <ChipWrapper {...rest} ref={undefined}>
     <ChipLabel isActive={isActive}>{label}</ChipLabel>
     <ChipValue isActive={isActive}>{children}</ChipValue>
     {button && (
