@@ -24,7 +24,13 @@ const Card = styled(Paper)`
 const CouncilPreview = ({ council, searchStrings }: CouncilPreviewProps) => (
   <Card>
     <Title>
-      <Link path={`/council/${council.id}`}>
+      <Link
+        path={
+          council.name === "Health data"
+            ? `/data/${council.id}`
+            : `/council/${council.id}`
+        }
+      >
         <Highlighter
           string={council.name}
           substrings={searchStrings}

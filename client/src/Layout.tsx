@@ -66,7 +66,7 @@ const Layout = ({ children }: LayoutProps) => (
         </LogoWrapper>
         <TitleWrapper>
           <MainTitle>Harvester</MainTitle>
-          <SubTitle>structured data from local councils</SubTitle>
+          <SubTitle>structured data from public sources</SubTitle>
         </TitleWrapper>
       </Link>
     </Header>

@@ -2,6 +2,7 @@ import React from "react";
 import Layout from "./Layout";
 import Router from "./routing/Router";
 import CouncilPage from "./pages/CouncilPage";
+import DataPage from "./pages/DataPage";
 import DocumentPage from "./pages/DocumentPage";
 import CouncilPickerPage from "./pages/CouncilPickerPage";
 import PersonPage from "./pages/PersonPage";
@@ -22,6 +23,7 @@ const App = () => (
           routes={{
             "/": () => <CouncilPickerPage />,
             "/council/:id": ({ id }) => <CouncilPage id={id} />,
+            "/data/:id": ({ id }) => <DataPage id={id} />,
             "/document/:index/:id": ({ id, index }) => (
               <DocumentPage id={id} index={index} />
             ),

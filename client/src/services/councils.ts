@@ -19,6 +19,12 @@ const councils: { [id: string]: Council } = {
     name: "Lambeth",
     people: ["2"],
     mapData: mapData.lambeth
+  },
+  "3": {
+    id: "3",
+    name: "Health data",
+    people: [],
+    mapData: mapData.rbkc
   }
 };
 
