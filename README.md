@@ -21,7 +21,7 @@ To insert a file into the ES instance, you need to use the `cli`.
 1. Get into sbt: `sbt`
 2. Open the cli project: `project cli`
 3. Run the command: `run --type <file-type> <relative-file-path>`
-For eg: `run --type councilContracts ../../Documents/local_news_kandc/contracts/kandc-contracts-services.csv`
+For eg: `run --type councilContracts ../../../Documents/local_news_kandc/contracts/kandc-contracts-services.csv`
 
 Acceptable file types are: `councilContracts`, `councilPetitions`, `planningApplications`.
 
