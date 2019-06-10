@@ -11,7 +11,8 @@ import scala.concurrent.ExecutionContext
 class Index(val client: ElasticClient)
   extends CouncilContractsIndex
     with PlanningApplicationsIndex
-    with CouncilPetitionsIndex {
+    with CouncilPetitionsIndex
+    with HealthContractsIndex {
 
   def getResource(index: String, id: String)(implicit ec: ExecutionContext) = {
     client.execute(
@@ -59,6 +60,19 @@ class Index(val client: ElasticClient)
          val sourceMap = hit.sourceAsMap
          hit.index match {
            case "council-contracts" =>
+             SearchHit(hit.index,
+               hit.id,
+               hitField(sourceMap, "title")._2,
+               Map()+ hitField(sourceMap, "description")+
+                 hitField(sourceMap, "valueLow")+
+                 hitField(sourceMap, "valueHigh")+
+                 hitField(sourceMap, "publishedDate")+
+                 hitField(sourceMap, "organisationName")+
+                 hitField(sourceMap, "status"),
+               hit.highlight.values.flatten.toList
+             )
+
+           case "health-contracts" =>
              SearchHit(hit.index,
                hit.id,
                hitField(sourceMap, "title")._2,

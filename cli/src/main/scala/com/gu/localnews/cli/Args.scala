@@ -11,6 +11,7 @@ object ImportType extends CliEnum[ImportType] {
   val values = findValues
 
   case object CouncilContracts extends ImportType
+  case object HealthContracts extends ImportType
   case object PlanningApplications extends ImportType
   case object CouncilPetitions extends ImportType
 }

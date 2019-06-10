@@ -14,7 +14,7 @@ object ContractSupplier {
 
   def fromStringFormat(text: String): List[ContractSupplier] = {
     text.split("\\]\\[").map { supplier =>
-      val bits = supplier.stripPrefix("[").split("|").map(_.trim())
+      val bits = supplier.stripPrefix("[").split("\\|").map(_.trim())
 
       def emptyToNone(s: String) = {
         if (s.isEmpty) {
@@ -23,6 +23,7 @@ object ContractSupplier {
           Some(s)
         }
       }
+      println("BITS", bits)
 
       ContractSupplier(
         bits(0),

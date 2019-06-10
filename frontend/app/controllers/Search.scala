@@ -15,4 +15,10 @@ class Search(index: Index, cc: ControllerComponents)(implicit ec: ExecutionConte
       Ok(Json.toJson(hits))
     }
   }
+  def searchHealth(indexForSearch: Index = index, q: String) = Action.async {
+    val params = SearchParameters(q)
+    indexForSearch.query(params).map { hits =>
+      Ok(Json.toJson(hits))
+    }
+  }
 }

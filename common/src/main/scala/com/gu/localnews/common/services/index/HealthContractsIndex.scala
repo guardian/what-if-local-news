@@ -1,28 +1,27 @@
 package com.gu.localnews.common.services.index
 
-import com.sksamuel.elastic4s.http.ElasticDsl._
-import com.gu.localnews.common.CouncilContract
+import com.gu.localnews.common.HealthContract
 import com.sksamuel.elastic4s.http.ElasticClient
-import com.sksamuel.elastic4s.http.index.CreateIndexResponse
+import com.sksamuel.elastic4s.http.ElasticDsl._
 import com.sksamuel.elastic4s.http.index.admin.IndexExistsResponse
 
-import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, ExecutionContext, Future}
 import scala.concurrent.duration._
 import scala.util.{Failure, Success}
 
-trait CouncilContractsIndex {
+
+trait HealthContractsIndex {
   def client: ElasticClient
 
-  def setupCouncilContracts()(implicit ec: ExecutionContext) = {
+  def setupHealthContracts()(implicit ec: ExecutionContext) = {
 
-    Await.ready(client.execute(indexExists("council-contracts")).flatMap { resp =>
-      println("Checking if we need to create council-contracts index...")
+    Await.ready(client.execute(indexExists("health-contracts")).flatMap { resp =>
+      println("Checking if we need to create health-contracts index...")
       resp.result match {
         case IndexExistsResponse(false) =>
 
           println("Index did not already exist - creating")
-          client.execute(createIndex("council-contracts").mappings(
+          client.execute(createIndex("health-contracts").mappings(
             mapping("_doc").as(
               textField("title"),
               textField("organisationName"),
@@ -51,7 +50,7 @@ trait CouncilContractsIndex {
     }, 10 seconds)
   }
 
-  def insertCouncilContracts(contract: CouncilContract)(implicit ec: ExecutionContext) = {
+  def insertHealthContracts(contract: HealthContract)(implicit ec: ExecutionContext) = {
     val values = Map(
       "title" -> contract.title,
       "organisationName" -> contract.organisationName,
@@ -72,18 +71,18 @@ trait CouncilContractsIndex {
       contract.awardedDate.map("awardedDate" -> _)++
       contract.awardedValue.map("awardedValue" -> _) ++
       contract.suppliers.map { suppliers =>
-      "suppliers" -> suppliers.map { supplier =>
-        Map(
-          "name" -> supplier.name,
-          "address" -> supplier.address,
-          "isSME" -> supplier.isSME,
-          "isVCSE" -> supplier.isVCSE
-        ) ++ supplier.refType.map("refType" -> _) ++ supplier.refNumber.map("refNumber" -> _)
+        "suppliers" -> suppliers.map { supplier =>
+          Map(
+            "name" -> supplier.name,
+            "address" -> supplier.address,
+            "isSME" -> supplier.isSME,
+            "isVCSE" -> supplier.isVCSE
+          ) ++ supplier.refType.map("refType" -> _) ++ supplier.refNumber.map("refNumber" -> _)
+        }
       }
-    }
 
-    val future = client.execute(indexInto("council-contracts" / "_doc").fields(values))
-    
+    val future = client.execute(indexInto("health-contracts" / "_doc").fields(values))
+
     future.andThen {
       case Success(response) => println(s"Successfully inserted document ${response.result}")
       case Failure(why) => println(s"Failed to insert document ${why}")
@@ -91,4 +90,5 @@ trait CouncilContractsIndex {
 
     future
   }
+
 }

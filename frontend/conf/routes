@@ -8,6 +8,7 @@ GET     /                                                    controllers.HomeCon
 
 GET     /api/search                                          controllers.Search.search(q: String)
 GET     /api/resources/:index/:id                            controllers.Resources.getResources(index, id)
+GET     /api/searchhealth/:index                             controllers.Search.searchHealth(index, q: String)
 
 GET     /api/management/healthcheck                          controllers.Management.healthCheck
 

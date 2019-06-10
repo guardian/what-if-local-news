@@ -2,6 +2,7 @@ import React from "react";
 import Omni from "../Omni";
 import {
   search,
+  searchCouncil,
   getCouncil,
   SearchResponse
 } from "../services/CouncillorService";

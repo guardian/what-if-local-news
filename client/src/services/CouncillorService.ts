@@ -109,4 +109,30 @@ const searchCouncil = (query: string): Promise<{ results: Council[] }> =>
     )
   });
 
-export { search, getDocument, searchCouncil, getCouncil, getPerson, getPlace };
+const searchHealth = ({
+  query,
+  tags
+}: {
+  query: string;
+  tags: string[];
+}): Promise<SearchResponse> =>
+  Promise.all([
+    fetch(
+      `/api/search?q=${[query, ...tags]
+        .filter(Boolean)
+        .map(t => `"${t.replace(esre, "\\$1")}"`)
+        .join(" AND ")}`
+    ).then(res => res.json()),
+    // ( ͡° ͜ʖ ͡°) it's demo time
+    network(null)
+  ]).then(([v]) => v);
+
+export {
+  search,
+  getDocument,
+  searchCouncil,
+  searchHealth,
+  getCouncil,
+  getPerson,
+  getPlace
+};

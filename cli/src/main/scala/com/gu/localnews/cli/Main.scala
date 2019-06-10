@@ -5,7 +5,8 @@ import java.util.concurrent.Executors
 import com.gu.localnews.cli.parsers.{
   ContractParser,
   PlanningApplicationParser,
-  PetitionParser
+  PetitionParser,
+  HealthContractParser
 }
 import com.gu.localnews.common.services.index.{Index, ElasticsearchClient}
 
@@ -22,10 +23,10 @@ object Main extends App {
 
   val options = new Args(args)
 
+  val index = new Index(client)
+
   val futures = options.`type`() match {
     case ImportType.CouncilContracts =>
-      // Setup first time IS THIS RIGHT?
-      val index = new Index(client)
       index.setupCouncilContracts()
       val contracts = ContractParser.parse(options.file())
       val total = contracts.length
@@ -36,9 +37,18 @@ object Main extends App {
         println(s"$i/$total")
         index.insertCouncilContracts(c)
       }
+    case ImportType.HealthContracts =>
+      index.setupHealthContracts()
+      val healthContracts = HealthContractParser.parse(options.file())
+      val total = healthContracts.length
+      var i = 0
+
+      healthContracts.map { h =>
+        i += 1
+        println(s"$i/$total")
+        index.insertHealthContracts(h)
+      }
     case ImportType.PlanningApplications =>
-      // Setup first time IS THIS RIGHT?
-      val index = new Index(client)
       index.setupPlanningApplications()
       val apps = PlanningApplicationParser.parse(options.file())
       val total = apps.length
@@ -51,7 +61,6 @@ object Main extends App {
       }
 
     case ImportType.CouncilPetitions =>
-      val index = new Index(client)
       index.setupCouncilPetitions()
       val petitions = PetitionParser.parse(options.file())
 
