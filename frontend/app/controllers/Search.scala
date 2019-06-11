@@ -1,6 +1,6 @@
 package controllers
 
-import com.gu.localnews.common.model.SearchParameters
+import com.gu.localnews.common.model.{Resource, SearchParameters}
 import com.gu.localnews.common.services.index.Index
 import play.api.libs.json.Json
 import play.api.mvc.{AbstractController, ControllerComponents}
@@ -15,9 +15,9 @@ class Search(index: Index, cc: ControllerComponents)(implicit ec: ExecutionConte
       Ok(Json.toJson(hits))
     }
   }
-  def searchHealth(indexForSearch: Index = index, q: String) = Action.async {
+  def searchHealth(q: String, idx: String) = Action.async {
     val params = SearchParameters(q)
-    indexForSearch.query(params).map { hits =>
+    index.query(params, idx).map { hits =>
       Ok(Json.toJson(hits))
     }
   }

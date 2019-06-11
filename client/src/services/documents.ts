@@ -31,6 +31,18 @@ export interface Contract extends SearchHit {
   };
 }
 
+export interface HealthContract extends SearchHit {
+  index: "health-contracts";
+  fields: {
+    description: string;
+    valueLow: string;
+    valueHigh: string;
+    status: string;
+    publishedDate: string;
+    organisationName: string;
+  };
+}
+
 export interface Petition extends SearchHit {
   index: "council-petitions";
   fields: {
@@ -42,4 +54,8 @@ export interface Petition extends SearchHit {
   };
 }
 
-export type Document = PlanningApplication | Contract | Petition;
+export type Document =
+  | PlanningApplication
+  | Contract
+  | Petition
+  | HealthContract;

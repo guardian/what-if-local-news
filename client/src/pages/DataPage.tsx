@@ -1,10 +1,10 @@
 import React from "react";
 import Omni from "../Omni";
 import {
-  search,
-  searchCouncil,
-  getCouncil,
-  SearchResponse
+    search,
+    searchCouncil,
+    getCouncil,
+    SearchResponse, searchHealth
 } from "../services/CouncillorService";
 import { Council } from "../services/councils";
 import styled from "styled-components";
@@ -40,7 +40,7 @@ type CouncilPageProps = {
 const DataPage = ({ id }: CouncilPageProps) => {
   const [tags, push, remove] = useArray<string>();
   const [results, loading, query, setQuery] = useDebouncedQuery(
-    (query, tags) => search({ query, tags }),
+    (query, tags) => search({ query, tags, queryStem: "/api/searchhealth/health-contracts" }),
     {
       hits: [],
       aggs: {

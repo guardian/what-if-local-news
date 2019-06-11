@@ -39,7 +39,7 @@ type CouncilPageProps = {
 const CouncilPage = ({ id }: CouncilPageProps) => {
   const [tags, push, remove] = useArray<string>();
   const [results, loading, query, setQuery] = useDebouncedQuery(
-    (query, tags) => search({ query, tags }),
+    (query, tags) => search({ query, tags, queryStem: "/api/search"}),
     {
       hits: [],
       aggs: {

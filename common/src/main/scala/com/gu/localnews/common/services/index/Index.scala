@@ -24,7 +24,7 @@ class Index(val client: ElasticClient)
     }
   }
 
-  def query(searchParams: SearchParameters)(implicit ec: ExecutionContext) = {
+  def query(searchParams: SearchParameters, indx: String = "_all")(implicit ec: ExecutionContext) = {
 
     def hitField(hit: Map[String, AnyRef], fieldName: String): (String, String) = {
       if (hit isDefinedAt(fieldName)) {
@@ -39,7 +39,7 @@ class Index(val client: ElasticClient)
       .order("score")
 
      client.execute(
-      search("_all").query(
+      search(indx).query(
         must(queryStringQuery(searchParams.q).defaultOperator("and"))
       )
         .from(searchParams.from)
@@ -127,6 +127,7 @@ class Index(val client: ElasticClient)
        SearchResults(hits, aggs)
      }
   }
+
 }
 
 

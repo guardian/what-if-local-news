@@ -67,15 +67,17 @@ const esre = new RegExp(
 );
 
 const search = ({
-  query,
-  tags
+  query = "*",
+  tags,
+  queryStem = "/api/search"
 }: {
   query: string;
   tags: string[];
+  queryStem: string;
 }): Promise<SearchResponse> =>
   Promise.all([
     fetch(
-      `/api/search?q=${[query, ...tags]
+      `${queryStem}?q=${[query, ...tags]
         .filter(Boolean)
         .map(t => `"${t.replace(esre, "\\$1")}"`)
         .join(" AND ")}`

@@ -137,6 +137,17 @@ const DocumentPreview = ({ document, searchStrings }: DocumentPreviewProps) => {
         />
       );
     }
+    case "health-contracts": {
+      return (
+        <DocumentPreviewContainer
+          highlights={document.highlights || []}
+          searchStrings={searchStrings}
+          title={document.title}
+          path={`/document/${document.index}/${document.id}`}
+          chips={[{ value: document.index, label: "Type" }]}
+        />
+      );
+    }
     default: {
       return null;
     }
