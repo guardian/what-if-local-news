@@ -40,7 +40,7 @@ type CouncilPageProps = {
 const DataPage = ({ id }: CouncilPageProps) => {
   const [tags, push, remove] = useArray<string>();
   const [results, loading, query, setQuery] = useDebouncedQuery(
-    (query, tags) => search({ query, tags, queryStem: "/api/searchhealth/health-contracts" }),
+    (query, tags) => search({ query, tags, queryStem: "/api/searchhealth" }),
     {
       hits: [],
       aggs: {

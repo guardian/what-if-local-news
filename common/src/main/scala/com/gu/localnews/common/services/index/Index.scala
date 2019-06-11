@@ -38,6 +38,8 @@ class Index(val client: ElasticClient)
     val highlightDefinition = highlight("*")
       .order("score")
 
+    println("=========>", queryStringQuery(searchParams.q))
+
      client.execute(
       search(indx).query(
         must(queryStringQuery(searchParams.q).defaultOperator("and"))
